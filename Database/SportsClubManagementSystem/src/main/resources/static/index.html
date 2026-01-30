@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sports Club Management UI</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#f2f2f2;
+    padding:20px;
+}
+section{
+    background:#fff;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:6px;
+}
+h2{
+    background:#222;
+    color:#fff;
+    padding:8px;
+}
+input, button{
+    width:100%;
+    padding:6px;
+    margin:4px 0;
+}
+button{
+    background:#007bff;
+    color:white;
+    border:none;
+    cursor:pointer;
+	width: 100px;
+	height: 50px;
+}
+pre{
+    background:#eee;
+    padding:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Sports Club Management System</h1>
+
+<!-- ================= COACH ================= -->
+<section>
+<h2>Coach</h2>
+
+<input id="coachId" placeholder="Coach ID">
+<input id="coachName" placeholder="Name">
+<input id="coachMob" placeholder="Mobile No">
+<input id="coachSpec" placeholder="Specialization">
+<input id="coachExp" placeholder="Experience Years">
+
+<button onclick="addCoach()">Add Coach</button>
+<button onclick="getCoach()">Get Coach</button>
+<button onclick="getAllCoach()">Get All Coaches</button>
+<button onclick="deleteCoach()">Delete Coach</button>
+
+<pre id="coachResult"></pre>
+</section>
+
+<!-- ================= MEMBER ================= -->
+<section>
+<h2>Member</h2>
+
+<input id="memberId" placeholder="Member ID">
+<input id="memberName" placeholder="Name">
+<input id="memberEmail" placeholder="Email">
+<input id="memberMob" placeholder="Mobile No">
+<input id="memberAge" placeholder="Age">
+<input id="memberGender" placeholder="Gender">
+<input id="memberJoin" placeholder="Join Date (yyyy-mm-dd)">
+
+<button onclick="addMember()">Add Member</button>
+<button onclick="updateMember()">Update Member</button>
+<button onclick="getMember()">Get Member</button>
+<button onclick="getAllMembers()">Get All Members</button>
+<button onclick="deleteMember()">Delete Member</button>
+<button onclick="deleteAllMembers()">Delete All Members</button>
+
+<pre id="memberResult"></pre>
+</section>
+
+<!-- ================= SPORT ================= -->
+<section>
+<h2>Sport</h2>
+
+<input id="sportId" placeholder="Sport ID">
+<input id="sportName" placeholder="Sport Name">
+<input id="sportCategory" placeholder="Category">
+
+<button onclick="addSport()">Add Sport</button>
+<button onclick="deleteSport()">Delete Sport</button>
+<button onclick="getAllSports()">Get All Sports</button>
+
+<pre id="sportResult"></pre>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section>
+<h2>Team</h2>
+
+<input id="teamId" placeholder="Team ID">
+<input id="teamName" placeholder="Team Name">
+<input id="teamSport" placeholder="Sport Name">
+<input id="teamCoach" placeholder="Coach Name">
+
+<button onclick="addTeam()">Add Team</button>
+<button onclick="updateTeam()">Update Team</button>
+<button onclick="getTeam()">Get Team</button>
+<button onclick="getAllTeams()">Get All Teams</button>
+<button onclick="deleteTeam()">Delete Team</button>
+<button onclick="deleteAllTeams()">Delete All Teams</button>
+
+<pre id="teamResult"></pre>
+</section>
+
+<!-- ================= TOURNAMENT ================= -->
+<section>
+<h2>Tournament</h2>
+
+<input id="tournamentId" placeholder="Tournament ID">
+<input id="tournamentName" placeholder="Tournament Name">
+<input id="tournamentSport" placeholder="Sport Name">
+<input id="tournamentStart" placeholder="Start Date (yyyy-mm-dd)">
+<input id="tournamentEnd" placeholder="End Date (yyyy-mm-dd)">
+
+<button onclick="addTournament()">Add Tournament</button>
+<button onclick="getTournament()">Get Tournament</button>
+<button onclick="getAllTournaments()">Get All Tournaments</button>
+<button onclick="deleteTournament()">Delete Tournament</button>
+<button onclick="deleteAllTournaments()">Delete All Tournaments</button>
+
+<pre id="tournamentResult"></pre>
+</section>
+
+<script>
+const base = "http://localhost:8080";
+
+/* -------- COACH -------- */
+function addCoach(){
+fetch(base+"/coach/add",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+coachId:coachId.value,
+name:coachName.value,
+mobNo:coachMob.value,
+specialization:coachSpec.value,
+experienceYears:coachExp.value
+})
+}).then(r=>r.text()).then(d=>coachResult.innerText=d);
+}
+function getCoach(){
+fetch(base+"/coach/get/"+coachId.value)
+.then(r=>r.json()).then(d=>coachResult.innerText=JSON.stringify(d,null,2));
+}
+function getAllCoach(){
+fetch(base+"/coach/getAll")
+.then(r=>r.json()).then(d=>coachResult.innerText=JSON.stringify(d,null,2));
+}
+function deleteCoach(){
+fetch(base+"/coach/delete/"+coachId.value,{method:"DELETE"})
+.then(r=>r.text()).then(d=>coachResult.innerText=d);
+}
+
+/* -------- MEMBER -------- */
+function addMember(){
+fetch(base+"/member/add",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+memberId:memberId.value,
+name:memberName.value,
+email:memberEmail.value,
+mobNo:memberMob.value,
+age:memberAge.value,
+gender:memberGender.value,
+joinDate:memberJoin.value
+})
+}).then(r=>r.text()).then(d=>memberResult.innerText=d);
+}
+function updateMember(){
+fetch(base+"/member/update",{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+memberId:memberId.value,
+name:memberName.value,
+email:memberEmail.value,
+mobNo:memberMob.value,
+age:memberAge.value,
+gender:memberGender.value,
+joinDate:memberJoin.value
+})
+}).then(r=>r.text()).then(d=>memberResult.innerText=d);
+}
+function getMember(){
+fetch(base+"/member/get/"+memberId.value)
+.then(r=>r.json()).then(d=>memberResult.innerText=JSON.stringify(d,null,2));
+}
+function getAllMembers(){
+fetch(base+"/member/getAll")
+.then(r=>r.json()).then(d=>memberResult.innerText=JSON.stringify(d,null,2));
+}
+function deleteMember(){
+fetch(base+"/member/delete/"+memberId.value,{method:"DELETE"})
+.then(r=>r.text()).then(d=>memberResult.innerText=d);
+}
+function deleteAllMembers(){
+fetch(base+"/member/deleteAll",{
+method:"DELETE",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({})
+}).then(r=>r.text()).then(d=>memberResult.innerText=d);
+}
+
+/* -------- SPORT -------- */
+function addSport(){
+fetch(base+"/sport/add",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+sportId:sportId.value,
+name:sportName.value,
+category:sportCategory.value
+})
+}).then(r=>r.text()).then(d=>sportResult.innerText=d);
+}
+function deleteSport(){
+fetch(base+"/sport/delete/"+sportId.value,{method:"DELETE"})
+.then(r=>r.text()).then(d=>sportResult.innerText=d);
+}
+function getAllSports(){
+fetch(base+"/sport/getAll")
+.then(r=>r.json()).then(d=>sportResult.innerText=JSON.stringify(d,null,2));
+}
+
+/* -------- TEAM -------- */
+function addTeam(){
+fetch(base+"/team/add",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+teamId:teamId.value,
+teamName:teamName.value,
+sportName:teamSport.value,
+coachName:teamCoach.value
+})
+}).then(r=>r.text()).then(d=>teamResult.innerText=d);
+}
+function updateTeam(){
+fetch(base+"/team/update",{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+teamId:teamId.value,
+teamName:teamName.value,
+sportName:teamSport.value,
+coachName:teamCoach.value
+})
+}).then(r=>r.text()).then(d=>teamResult.innerText=d);
+}
+function getTeam(){
+fetch(base+"/team/get/"+teamId.value)
+.then(r=>r.json()).then(d=>teamResult.innerText=JSON.stringify(d,null,2));
+}
+function getAllTeams(){
+fetch(base+"/team/getAll")
+.then(r=>r.json()).then(d=>teamResult.innerText=JSON.stringify(d,null,2));
+}
+function deleteTeam(){
+fetch(base+"/team/delete/"+teamId.value,{method:"DELETE"})
+.then(r=>r.text()).then(d=>teamResult.innerText=d);
+}
+function deleteAllTeams(){
+fetch(base+"/team/deleteAll",{
+method:"DELETE",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({})
+}).then(r=>r.text()).then(d=>teamResult.innerText=d);
+}
+
+/* -------- TOURNAMENT -------- */
+function addTournament(){
+fetch(base+"/tournament/add",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+tournamentId:tournamentId.value,
+tournamentName:tournamentName.value,
+sportName:tournamentSport.value,
+startDate:tournamentStart.value,
+endDate:tournamentEnd.value
+})
+}).then(r=>r.text()).then(d=>tournamentResult.innerText=d);
+}
+function getTournament(){
+fetch(base+"/tournament/get/"+tournamentId.value)
+.then(r=>r.json()).then(d=>tournamentResult.innerText=JSON.stringify(d,null,2));
+}
+function getAllTournaments(){
+fetch(base+"/tournament/getAll")
+.then(r=>r.json()).then(d=>tournamentResult.innerText=JSON.stringify(d,null,2));
+}
+function deleteTournament(){
+fetch(base+"/tournament/delete/"+tournamentId.value,{method:"DELETE"})
+.then(r=>r.text()).then(d=>tournamentResult.innerText=d);
+}
+function deleteAllTournaments(){
+fetch(base+"/tournament/deleteAll",{
+method:"DELETE",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({})
+}).then(r=>r.text()).then(d=>tournamentResult.innerText=d);
+}
+</script>
+
+</body>
+</html>
